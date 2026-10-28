@@ -51,5 +51,6 @@ st.dataframe(
         "azimuth_deg": st.column_config.NumberColumn("Azimuth (°)", format="%.0f"),
     },
 )
-st.caption("Built by Faheem Niyas. Code: [github.com/Hakkrax/solar-ops-dashboard](https://github.com/Hakkrax/solar-ops-dashboard) · "
+st.caption("Built by Faheem Niyas. Code: "
+           "[github.com/Hakkrax/solar-ops-dashboard](https://github.com/Hakkrax/solar-ops-dashboard) · "
            + ui.HISTORICAL_NOTE)

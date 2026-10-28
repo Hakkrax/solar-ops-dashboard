@@ -48,7 +48,7 @@ if flags.empty:
 counts = flags.groupby("severity").size().reindex(ui.SEVERITY_ORDER, fill_value=0)
 c = st.columns(4)
 for col, sev in zip(c, ui.SEVERITY_ORDER, strict=True):
-    col.metric(ui.SEVERITY_LABELS[sev], f"{counts[sev]:,}")
+    col.metric(ui.SEVERITY_LABELS[sev], f"{counts[sev]:,}", border=True)
 
 severities = st.pills("Show", options=ui.SEVERITY_ORDER, default=["critical", "warning", "info"],
                       format_func=ui.SEVERITY_LABELS.get, selection_mode="multi")
@@ -63,6 +63,7 @@ else:
                .groupby(["month", "system"], as_index=False).size())
     fig = px.bar(monthly, x="month", y="size", color="system", barmode="group",
                  color_discrete_map={labels[i]: ui.SYSTEM_COLORS[i] for i in labels},
+                 category_orders={"system": [labels[i] for i in sorted(labels)]},
                  labels={"month": "Month", "size": "Flagged days", "system": "System"})
     fig.update_traces(marker_line_width=0)
     fig.update_layout(legend=dict(orientation="h", y=-0.2), margin=dict(t=10), bargap=0.25)

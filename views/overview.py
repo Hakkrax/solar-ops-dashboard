@@ -26,18 +26,35 @@ critical_days = anoms[anoms["severity"] == "critical"][["system_id", "local_date
 
 c = st.columns(3)
 c[0].metric("Energy", ui.fmt(k["energy_mwh"], ",.1f", " MWh"),
-            help="AC energy from hours the ETL trusted. Missing hours are not filled in.")
+            help="AC energy from hours the ETL trusted. Missing hours are not filled in.", border=True)
 c[1].metric("Specific yield", ui.fmt(k["specific_yield"], ",.0f", " kWh/kWp"),
-            help="Energy per kW of installed DC capacity over the selected period.")
+            help="Energy per kW of installed DC capacity over the selected period.", border=True)
 c[2].metric("Performance ratio", ui.fmt(k["performance_ratio"], ".1%"),
-            help="Energy ÷ (DC capacity × measured plane-of-array sunlight). Hours with both values only.")
+            help="Energy ÷ (DC capacity × measured plane-of-array sunlight). Hours with both values only.", border=True)
 c = st.columns(3)
 c[0].metric("Data coverage", ui.fmt(k["coverage"], ".1%"),
-            help="Share of daylight hours with a trusted energy reading.")
+            help="Share of daylight hours with a trusted energy reading.", border=True)
 c[1].metric("Performance index", ui.fmt(k["performance_index"], ".2f"),
-            help="Actual ÷ expected energy on scored days. 1.00 = as usual for these systems in this weather.")
+            help="Actual ÷ expected energy on scored days. 1.00 = as usual for these systems in this weather.", border=True)
 c[2].metric("Critical days", f"{len(critical_days):,}",
-            help="System-days producing under 60% of expected energy. See the Anomalies page.")
+            help="System-days producing under 60% of expected energy. See the Anomalies page.", border=True)
+
+# Lead with the one thing an engineer should look at first in this selection.
+crit = anoms[anoms["severity"] == "critical"].drop_duplicates(["system_id", "local_date"])
+if crit.empty:
+    st.success("No critical days in this selection: every scored day produced at least 60% of expected energy.",
+               icon=":material/check_circle:")
+else:
+    worst = crit["system_id"].value_counts()
+    wid, n = int(worst.index[0]), int(worst.iloc[0])
+    lost = (crit.loc[crit["system_id"] == wid, "expected_kwh"] - crit.loc[crit["system_id"] == wid, "energy_kwh"]).sum()
+    median_pi = crit.loc[crit["system_id"] == wid, "performance_index"].median()
+    with st.container(border=True):
+        st.markdown(
+            f"**Look first: {labels[wid]}.** {n:,} critical day{'s' if n != 1 else ''} in this period, producing a "
+            f"median {median_pi:.0%} of expected energy, about {lost / 1000:,.1f} MWh below normal on those days."
+        )
+        st.page_link("views/anomalies.py", label="See the flagged days", icon=":material/warning:")
 
 st.subheader("Daily energy")
 smooth = st.segmented_control("View", ["7-day average", "Daily"], default="7-day average",
@@ -48,6 +65,7 @@ if smooth != "Daily":
                           .transform(lambda s: s.rolling("7D", min_periods=4).mean()).to_numpy())
 fig = px.line(plot, x="local_date", y="energy_kwh", color="system",
               color_discrete_map={labels[i]: ui.SYSTEM_COLORS[i] for i in labels},
+              category_orders={"system": [labels[i] for i in sorted(labels)]},
               labels={"local_date": "Date", "energy_kwh": "Energy (kWh/day)", "system": "System"})
 fig.update_traces(line_width=1.5, connectgaps=False,
                   hovertemplate="%{x|%d %b %Y}<br>%{y:,.0f} kWh<extra>%{fullData.name}</extra>")

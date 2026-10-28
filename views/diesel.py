@@ -38,9 +38,9 @@ a = diesel.DieselAssumptions(litres_per_kwh=lpk, price_per_litre=price, currency
 total = diesel.displacement(float(d["energy_kwh"].sum()), a)
 
 c = st.columns(3)
-c[0].metric("Diesel avoided", f"{total['litres']:,.0f} L")
-c[1].metric("Fuel cost avoided", f"{a.currency} {total['cost']:,.0f}")
-c[2].metric("CO₂ avoided", f"{total['co2_tonnes']:,.1f} t")
+c[0].metric("Diesel avoided", f"{total['litres']:,.0f} L", border=True)
+c[1].metric("Fuel cost avoided", f"{a.currency} {total['cost']:,.0f}", border=True)
+c[2].metric("CO₂ avoided", f"{total['co2_tonnes']:,.1f} t", border=True)
 st.caption(f"From {total['energy_kwh'] / 1000:,.1f} MWh of trusted solar energy in the selection. "
            "Days with missing data count as zero, so these figures are a lower bound.")
 
@@ -48,6 +48,7 @@ monthly = diesel.monthly_displacement(d, a)
 monthly["system"] = monthly["system_id"].map(labels)
 fig = px.bar(monthly, x="month", y="litres", color="system",
              color_discrete_map={labels[i]: ui.SYSTEM_COLORS[i] for i in labels},
+             category_orders={"system": [labels[i] for i in sorted(labels)]},
              labels={"month": "Month", "litres": "Diesel avoided (litres)", "system": "System"})
 fig.update_traces(marker_line_width=0)
 fig.update_layout(legend=dict(orientation="h", y=-0.2), margin=dict(t=10), bargap=0.2)

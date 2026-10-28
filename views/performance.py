@@ -36,9 +36,9 @@ if s.empty:
 
 ref = s["reference_pr"].iloc[0]
 c = st.columns(3)
-c[0].metric("Reference PR", ui.fmt(ref, ".1%"), help="Median daily PR over all scored days, 2017–2019.")
-c[1].metric("Scored days", f"{len(s):,}")
-c[2].metric("Actual ÷ expected", ui.fmt(s["scored_energy_kwh"].sum() / s["expected_kwh"].sum(), ".2f"))
+c[0].metric("Reference PR", ui.fmt(ref, ".1%"), help="Median daily PR over all scored days, 2017–2019.", border=True)
+c[1].metric("Scored days", f"{len(s):,}", border=True)
+c[2].metric("Actual ÷ expected", ui.fmt(s["scored_energy_kwh"].sum() / s["expected_kwh"].sum(), ".2f"), border=True)
 
 color = ui.SYSTEM_COLORS[system_id]
 fig = go.Figure()

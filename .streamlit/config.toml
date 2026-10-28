@@ -1,9 +1,34 @@
 [theme]
+base = "light"
 primaryColor = "#0f766e"
-font = "sans serif"
+backgroundColor = "#f6f8fa"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#14212b"
+linkColor = "#0f766e"
+borderColor = "#d5dde4"
+showWidgetBorder = true
+baseRadius = "0.5rem"
+font = "Archivo:https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400..800&display=swap, sans-serif"
+headingFont = "Archivo:https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400..800&display=swap, sans-serif"
+headingFontWeights = [800, 700, 700, 600, 600, 600]
+headingFontSizes = ["2.5rem", "1.6rem", "1.3rem"]
+metricValueFontSize = "1.9rem"
+metricValueFontWeight = 700
+dataframeHeaderBackgroundColor = "#eef2f5"
+
+[theme.sidebar]
+backgroundColor = "#14212b"
+secondaryBackgroundColor = "#1f2f3b"
+textColor = "#e6ecf1"
+linkColor = "#7fd1c7"
+borderColor = "#33444f"
+primaryColor = "#2aa198"
 
 [server]
 headless = true
 
 [browser]
 gatherUsageStats = false
+
+[client]
+toolbarMode = "viewer"

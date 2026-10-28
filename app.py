@@ -1,11 +1,16 @@
 """Solar Fleet Performance Monitor: Streamlit entry point."""
 
+from pathlib import Path
+
 import streamlit as st
 
 from solar_ops import ui
 from solar_ops.data import DataError
 
-st.set_page_config(page_title="Solar Fleet Performance Monitor", page_icon="☀️", layout="wide")
+ROOT = Path(__file__).parent
+st.set_page_config(page_title="Solar Fleet Performance Monitor", page_icon=str(ROOT / "assets" / "icon.svg"),
+                   layout="wide")
+st.logo(str(ROOT / "assets" / "logo.svg"), size="large", icon_image=str(ROOT / "assets" / "icon.svg"))
 
 try:
     systems, daily, dq_daily, source_run = ui.load_fleet()
@@ -21,6 +26,7 @@ st.session_state["ctx"] = {
 with st.sidebar:
     st.divider()
     st.caption(ui.HISTORICAL_NOTE)
+    st.caption("Built by Faheem Niyas · [Code on GitHub](https://github.com/Hakkrax/solar-ops-dashboard)")
 
 pages = [
     st.Page("views/overview.py", title="Overview", icon=":material/dashboard:", default=True),

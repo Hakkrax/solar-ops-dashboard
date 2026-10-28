@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 96" width="520" height="96">
+  <g transform="translate(48 48)" stroke="#f2b134" stroke-width="6" stroke-linecap="round">
+    <circle r="16" fill="#f2b134" stroke="none"/>
+    <line x1="0" y1="-38" x2="0" y2="-26"/><line x1="0" y1="26" x2="0" y2="38"/>
+    <line x1="-38" y1="0" x2="-26" y2="0"/><line x1="26" y1="0" x2="38" y2="0"/>
+    <line x1="-27" y1="-27" x2="-18" y2="-18"/><line x1="18" y1="18" x2="27" y2="27"/>
+    <line x1="-27" y1="27" x2="-18" y2="18"/><line x1="18" y1="-18" x2="27" y2="-27"/>
+  </g>
+  <text x="104" y="46" font-family="Archivo, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff">Solar Fleet</text>
+  <text x="104" y="80" font-family="Archivo, Segoe UI, Arial, sans-serif" font-size="25" font-weight="500" fill="#9fb3c2">Performance Monitor</text>
+</svg>

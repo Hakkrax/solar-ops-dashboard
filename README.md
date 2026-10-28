@@ -1,19 +1,49 @@
 # Solar Fleet Performance Monitor
 
 [![tests](https://github.com/Hakkrax/solar-ops-dashboard/actions/workflows/tests.yml/badge.svg)](https://github.com/Hakkrax/solar-ops-dashboard/actions/workflows/tests.yml)
+[![Live app](https://img.shields.io/badge/live%20app-Streamlit-0f766e)](https://faheem-solar-ops.streamlit.app)
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![Licence](https://img.shields.io/badge/licence-MIT-lightgrey)
 
 A Streamlit dashboard that answers the question an operations engineer asks every
 morning: **is each solar system producing what the weather says it should, and if
 not, where do I look first?**
 
-> **Live app:** https://faheem-solar-ops.streamlit.app (free hosting: if it has been idle,
-> click "wake up" and give it about 30 seconds)
->
-> Historical open data (NREL PVDAQ, 2017–2019) for three rooftop systems in Las Vegas,
-> cleaned by my [solar ETL pipeline](https://github.com/Hakkrax/solar-etl-pipeline).
-> It is **not** a live equipment feed.
+**[Open the live app](https://faheem-solar-ops.streamlit.app)** (free hosting: if it has been idle,
+click "wake up" and give it about 30 seconds).
 
 ![Overview page](docs/overview.jpg)
+
+## Highlights
+
+- **It found a real fault.** System 1419 was flagged on 137 critical days. The raw
+  monitoring files show one of its two inverters at 0 W at midday on those days while the
+  other ran normally: a single-inverter outage caught from system totals alone.
+- **Expected energy from each system's own history**, not a datasheet, so the comparison
+  holds for any site with a sunlight sensor.
+- **Six anomaly rules**, each with a plain-English reason and thresholds you can change
+  on the page, including a robust z-score (median and MAD) for drops fixed limits miss.
+- **Honest data handling:** gaps stay gaps, unscored days are labelled, and every
+  definition is on the About page.
+- **Tested:** 31 pytest tests cover the analytics, every rule on hand-made days with
+  known answers, and a smoke test that renders every page. CI runs on every push.
+
+| | |
+|---|---|
+| **Data** | Historical open data (NREL PVDAQ, 2017–2019) for three rooftop systems in Las Vegas, cleaned by my [solar ETL pipeline](https://github.com/Hakkrax/solar-etl-pipeline). It is **not** a live equipment feed. |
+| **Stack** | Python 3.12, Streamlit, Plotly, pandas, SQLite, pytest, ruff, GitHub Actions |
+| **Hosting** | Streamlit Community Cloud, deployed from `main` |
+
+<table>
+<tr>
+<td><img src="docs/actual_vs_expected.jpg" alt="Actual vs expected energy for system 1419"></td>
+<td><img src="docs/anomalies.jpg" alt="Anomalies page with monthly flagged days and the flag list"></td>
+</tr>
+<tr>
+<td align="center">Actual vs expected for system 1419</td>
+<td align="center">Anomalies with a reason for every flag</td>
+</tr>
+</table>
 
 ## What it does
 
@@ -41,8 +71,6 @@ doesn't drag the ratio down. When the site's sunlight sensor is missing for a da
 the weather model's sunlight is used with its own reference ratio, and the page
 says which basis was used. Days with under 80% daylight data coverage, or very little
 sunlight, are not scored.
-
-![Actual vs expected for system 1419](docs/actual_vs_expected.jpg)
 
 ## Anomaly rules
 
@@ -76,6 +104,8 @@ CO₂    = litres × 2.68 kg/L
 ```
 
 Missing days count as zero, so results are a lower bound.
+
+![Diesel savings scenario](docs/diesel.jpg)
 
 ## Run it
 
@@ -124,6 +154,7 @@ solar_ops/
   diesel.py          diesel-displacement maths
   data.py            loads and validates the SQLite file
   ui.py              shared Streamlit helpers, colours, formatting
+assets/              logo and icon
 scripts/build_data.py
 tests/
 ```
@@ -142,3 +173,9 @@ tests/
 - Open-Meteo historical weather API, CC BY 4.0.
 
 MIT licence for the code. The data is not covered by the code licence.
+
+## Part of a three-project portfolio
+
+1. [Retail sales and customer analytics](https://github.com/Hakkrax/retail-bi-analytics): Python cleaning, SQL star schema and a Tableau dashboard
+2. [Solar PV ETL pipeline](https://github.com/Hakkrax/solar-etl-pipeline): the tested pipeline that produces this app's data
+3. **Solar fleet performance monitor** (this repository)
