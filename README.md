@@ -6,7 +6,8 @@ A Streamlit dashboard that answers the question an operations engineer asks ever
 morning: **is each solar system producing what the weather says it should, and if
 not, where do I look first?**
 
-> **Live app:** _link added after deployment_
+> **Live app:** https://faheem-solar-ops.streamlit.app (free hosting: if it has been idle,
+> click "wake up" and give it about 30 seconds)
 >
 > Historical open data (NREL PVDAQ, 2017–2019) for three rooftop systems in Las Vegas,
 > cleaned by my [solar ETL pipeline](https://github.com/Hakkrax/solar-etl-pipeline).
